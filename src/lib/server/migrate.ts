@@ -1,19 +1,25 @@
-import { Migrator, FileMigrationProvider } from 'kysely';
-import { promises as fs } from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { Migrator } from 'kysely';
+import type { MigrationProvider, Migration } from 'kysely';
 import { db } from './db';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Import migrations explicitly so they get bundled
+import * as m001 from './migrations/001_initial';
+import * as m002 from './migrations/002_foodsafe_nullable';
+
+// Inline migration provider that doesn't rely on filesystem scanning
+const migrationProvider: MigrationProvider = {
+	async getMigrations(): Promise<Record<string, Migration>> {
+		return {
+			'001_initial': m001,
+			'002_foodsafe_nullable': m002
+		};
+	}
+};
 
 export async function migrate() {
 	const migrator = new Migrator({
 		db,
-		provider: new FileMigrationProvider({
-			fs,
-			path,
-			migrationFolder: path.join(__dirname, 'migrations')
-		})
+		provider: migrationProvider
 	});
 
 	const { error, results } = await migrator.migrateToLatest();
