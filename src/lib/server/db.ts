@@ -1,11 +1,11 @@
 import { Kysely, PostgresDialect } from 'kysely';
 import pg from 'pg';
 import type { Database } from '$lib/types';
-import { DB_URL } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 const dialect = new PostgresDialect({
 	pool: new pg.Pool({
-		connectionString: DB_URL
+		connectionString: env.DB_URL
 	})
 });
 
