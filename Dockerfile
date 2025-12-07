@@ -9,6 +9,12 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
+
+# DB_URL is required at build time for SvelteKit's static env validation
+# The actual runtime value is provided via environment variables
+ARG DB_URL=postgresql://localhost/glazedb
+ENV DB_URL=$DB_URL
+
 RUN npm run build
 RUN npm prune --production
 

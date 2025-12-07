@@ -24,6 +24,8 @@ jobs:
       - run: npm run lint
 
       - run: npm run check
+        env:
+          DB_URL: postgresql://localhost/glazedb
 
   test:
     runs-on: ubuntu-latest
