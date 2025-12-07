@@ -30,4 +30,20 @@ html {
 	.no-print {
 		display: none !important;
 	}
+
+	/* Force light mode when printing */
+	html {
+		background: white !important;
+		color: black !important;
+	}
+
+	html.dark {
+		background: white !important;
+		color: black !important;
+	}
+
+	html.dark * {
+		background-color: transparent !important;
+		color: inherit !important;
+	}
 }
